@@ -38,7 +38,7 @@ try {
     const { data, error } = await supabase
         .from('produtos1')
         .select('*')
-        .neq('status', 'vendido')
+
         .order('created_at', {
             ascending: false
         });
@@ -304,16 +304,6 @@ try {
 
     if (transacaoError) {
         throw transacaoError;
-    }
-
-    // Marcar produto como vendido
-    const { error: updateError } = await supabase
-        .from('produtos1')
-        .update({ status: 'vendido' })
-        .eq('id', produto_id);
-
-    if (updateError) {
-        console.warn('Aviso: não foi possível atualizar status do produto:', updateError.message);
     }
 
     await supabase
