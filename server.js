@@ -40,7 +40,6 @@ try {
     const { data, error } = await supabase
         .from('produtos1')
         .select('*')
-        .eq('status', 'disponivel')
         .order('created_at', {
             ascending: false
         });
@@ -260,7 +259,8 @@ try {
 
     const {
         produto_id,
-        comprador_id
+        comprador_id,
+        quantidade = 1
     } = req.body;
 
     if (!produto_id) {
@@ -274,7 +274,6 @@ try {
             .from('produtos1')
             .select('*')
             .eq('id', produto_id)
-            .eq('status', 'disponivel')
             .single();
 
     if (produtoError || !produto) {
@@ -283,29 +282,16 @@ try {
         });
     }
 
-    const { error: updateError } =
-        await supabase
-            .from('produtos1')
-            .update({
-                status: 'vendido'
-            })
-            .eq('id', produto_id)
-            .eq('status', 'disponivel');
-
-    if (updateError) {
-        throw updateError;
-    }
-
     const { data: transacao, error: transacaoError } =
         await supabase
             .from('transacoes')
             .insert([
                 {
-                    comprador_id: null,
+                    comprador_id: comprador_id || null,
                     vendedor_id: produto.vendedor_id,
                     produto_id,
                     tipo: 'compra',
-                    valor_total: produto.preco
+                    valor_total: produto.preco * quantidade
                 }
             ])
             .select();
