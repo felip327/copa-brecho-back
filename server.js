@@ -260,7 +260,8 @@ try {
     const {
         produto_id,
         comprador_id,
-        quantidade = 1
+        quantidade = 1,
+        cliente
     } = req.body;
 
     if (!produto_id) {
@@ -291,7 +292,11 @@ try {
                     vendedor_id: produto.vendedor_id,
                     produto_id,
                     tipo: 'compra',
-                    valor_total: produto.preco * quantidade
+                    valor_total: produto.preco * quantidade,
+                    quantidade: quantidade,
+                    nome_cliente: cliente?.nome || null,
+                    email_cliente: cliente?.email || null,
+                    endereco_entrega: cliente?.endereco || null
                 }
             ])
             .select();
