@@ -371,4 +371,4 @@ app.listen(PORT, () => {
 // VERCEL
 // ======================================
 
-module.exports.handler = serverless(app);
+module.exports = app;
