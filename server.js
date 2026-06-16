@@ -14,9 +14,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-throw new Error(
-'SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são obrigatórias.'
-);
+  console.warn('AVISO: SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY não estão configuradas corretamente.');
 }
 
 const supabase = createClient(
@@ -261,7 +259,8 @@ try {
         produto_id,
         comprador_id,
         quantidade = 1,
-        cliente
+        cliente,
+        forma_pagamento
     } = req.body;
 
     if (!produto_id) {
@@ -296,7 +295,8 @@ try {
                     quantidade: quantidade,
                     nome_cliente: cliente?.nome || null,
                     email_cliente: cliente?.email || null,
-                    endereco_entrega: cliente?.endereco || null
+                    endereco_entrega: cliente?.endereco || null,
+                    forma_pagamento: forma_pagamento || null
                 }
             ])
             .select();
